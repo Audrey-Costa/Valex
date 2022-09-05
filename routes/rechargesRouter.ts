@@ -1,10 +1,11 @@
 import { Router } from "express";
+import { recharge } from "../controllers/rechargeController";
 import schemaValidation from "../middlewares/schemaValidationMiddleware";
 import rechargesSchema from "../schemas/rechargesSchemas";
 
 const rechargesRouter = Router();
 
-rechargesRouter.post("/recharges", schemaValidation(rechargesSchema))
+rechargesRouter.post("/recharges/:id", schemaValidation(rechargesSchema), recharge)
 rechargesRouter.get("/recharges");
 
 export default rechargesRouter;

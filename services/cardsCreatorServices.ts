@@ -23,7 +23,6 @@ export async function createCard(apiKey: any, employeeId: number, type: Transact
 
     const CVCEncrypt = crypter(securityCode, true);
 
-    console.log(securityCode)
     await insert(
         {
         employeeId, 

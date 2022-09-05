@@ -23,7 +23,7 @@ async function getCard(id: number): Promise<object>{
     if(card){
         return card;
     }
-    throw {type: "Not Found", message: "Card are not valid!"};
+    throw {type: "Not Found", message: "Card not valid!"};
 }
 
 function checkCredentials(CVC: string, securityCode: string){
