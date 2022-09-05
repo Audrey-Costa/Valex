@@ -13,5 +13,8 @@ export default async function errorHandlerMiddleware(error: any, req: Request, r
     if(error.type === "Bad Request"){
         return res.status(400).send(error.message);
     }
+    if(error.type === "Forbidden"){
+        return res.status(403).send(error.message);
+    }
     return res.sendStatus(500);
 }

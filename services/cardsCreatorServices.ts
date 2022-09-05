@@ -21,7 +21,7 @@ export async function createCard(apiKey: any, employeeId: number, type: Transact
 
     const securityCode = CVCGenerator();
 
-    const CVCEncrypt = encrypter(securityCode);
+    const CVCEncrypt = crypter(securityCode, true);
 
     await insert(
         {
@@ -35,7 +35,7 @@ export async function createCard(apiKey: any, employeeId: number, type: Transact
         type})
 }
 
-async function findCompany(apiKey: any) {
+async function findCompany(apiKey: any): Promise<object> {
     const company: object = await findByApiKey(apiKey);
     if( !company ){
         throw {type: "Not Found", message: "Company not found!"};
@@ -43,7 +43,7 @@ async function findCompany(apiKey: any) {
     return company;
 }
 
-async function findEmployee(employeeId: number) {
+async function findEmployee(employeeId: number): Promise<object> {
     const employee: object = await employeeRepository.findById(employeeId);
     if( !employee ){
         throw {type: "Not Found", message: "Employee not found!"};
@@ -58,8 +58,8 @@ async function findTypeCardForEmployee(employeeId: number, type: TransactionType
     }
 }
 
-async function generateNumber(){
-    const cardNumber = faker.phone.number("####.####.####-##");
+async function generateNumber(): Promise<string>{
+    const cardNumber = faker.phone.number("#### #### #### ####");
     const cards = await find();
     for (let i = 0; i < cards.length; i++){
         if(cards[i].number === cardNumber){
@@ -70,7 +70,7 @@ async function generateNumber(){
     return cardNumber;
 }
 
-function shortName(name: string){
+function shortName(name: string): string{
     const separetedName = name.split(" ");
     const shortSeparetedName = []
     
@@ -85,15 +85,22 @@ function shortName(name: string){
     return shortSeparetedName.join(" ")
 }
 
-function validity(){
+function validity(): string{
     return dayjs(dayjs(Date.now()).add(5, 'year')).format("MM/YY");
 }
 
-function CVCGenerator(){
+function CVCGenerator(): string{
     return faker.phone.number("###");
 }
 
-function encrypter(CVC: string){
+export function crypter(CVC: string, encrypt: boolean): string{
     const cryptr = new Cryptr('secretKey');
-    return cryptr.encrypt(CVC);
+    if(encrypt){
+        const encript = cryptr.encrypt(CVC);
+        return encript;
+    }else{
+        const decrypt = cryptr.decrypt(CVC);
+        return decrypt;
+    }
+
 }
