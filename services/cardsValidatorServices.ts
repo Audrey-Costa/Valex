@@ -7,10 +7,10 @@ export async function validateCard(id: number, securityCode: string, password: s
     const card: any = await getCard(id);
     const CVC = crypt(card.securityCode, false);
     checkCredentials(CVC, securityCode)
-    const encryptPassword = crypt(card.securityCode, true);
+    const encryptPassword = crypt(password, true);
     checkBlock(card.isBlocked);
     checkValidity(card.expirationDate);
-    await registerPassword(card.id, password)
+    await registerPassword(card.id, encryptPassword);
 }
 
 

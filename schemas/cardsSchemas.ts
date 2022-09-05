@@ -10,4 +10,8 @@ const cardsValidateSchema = Joi.object({
     password: Joi.string().regex(/([0-9]{4})/).required()
 })
 
-export { cardsCreateSchema, cardsValidateSchema};
+const passwordValidateSchema = Joi.object({
+    password: Joi.string().regex(/([0-9]{4})/).required()
+})
+
+export { cardsCreateSchema, cardsValidateSchema, passwordValidateSchema};

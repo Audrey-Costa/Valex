@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import Cryptr from "cryptr";
 
 export async function createCard(apiKey: any, employeeId: number, type: TransactionTypes){
-    const company = await findCompany(apiKey);
+    await findCompany(apiKey);
 
     const employee: any = await findEmployee(employeeId);
 
@@ -23,6 +23,7 @@ export async function createCard(apiKey: any, employeeId: number, type: Transact
 
     const CVCEncrypt = crypter(securityCode, true);
 
+    console.log(securityCode)
     await insert(
         {
         employeeId, 
@@ -37,10 +38,10 @@ export async function createCard(apiKey: any, employeeId: number, type: Transact
 
 async function findCompany(apiKey: any): Promise<object> {
     const company: object = await findByApiKey(apiKey);
-    if( !company ){
-        throw {type: "Not Found", message: "Company not found!"};
+    if( company ){
+        return;
     }
-    return company;
+    throw {type: "Not Found", message: "Company not found!"};
 }
 
 async function findEmployee(employeeId: number): Promise<object> {
