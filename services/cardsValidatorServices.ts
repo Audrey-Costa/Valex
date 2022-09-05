@@ -7,10 +7,11 @@ export async function validateCard(id: number, securityCode: string, password: s
     const card: any = await getCard(id);
     const CVC = crypt(card.securityCode, false);
     checkCredentials(CVC, securityCode)
+    isActive(card.password);
     const encryptPassword = crypt(password, true);
-    checkBlock(card.isBlocked);
     checkValidity(card.expirationDate);
-    await registerPassword(card.id, encryptPassword);
+    const isBlocked = false;
+    await registerPassword(card.id, encryptPassword, isBlocked);
 }
 
 
@@ -33,11 +34,11 @@ function checkCredentials(CVC: string, securityCode: string){
     throw {type: "Unauthorized", message: "Credentials are not valid!"};
 }
 
-function checkBlock(isBlocked: boolean){
-    if (isBlocked){
+function isActive(password: string){
+    if (!password){
         return;
     }
-    throw {type: "Conflict", message: "Card already valid!"};
+    throw {type: "Conflict", message: "Card already active!"};
 }
 
 function checkValidity(expirationDate: string){
@@ -47,6 +48,6 @@ function checkValidity(expirationDate: string){
     throw {type: "Forbidden", message: "Card out of validity!"};
 }
 
-async function registerPassword(cardId: number, password: string) {
-    await update(cardId, {password, isBlocked: false})
+async function registerPassword(cardId: number, password: string, isBlocked: boolean) {
+    await update(cardId, {password, isBlocked})
 }

@@ -5,7 +5,6 @@ import rechargesSchema from "../schemas/rechargesSchemas";
 
 const rechargesRouter = Router();
 
-rechargesRouter.post("/recharges/:id", schemaValidation(rechargesSchema), recharge)
-rechargesRouter.get("/recharges");
+rechargesRouter.post("/recharges/:id", schemaValidation(rechargesSchema), recharge);
 
 export default rechargesRouter;

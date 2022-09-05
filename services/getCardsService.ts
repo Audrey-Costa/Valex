@@ -23,7 +23,7 @@ async function getCard(id: number){
     if (employeeCards.length > 0){
         return employeeCards;
     }
-    throw {type: "Not Found", message: "Cards not founded!"};
+    throw {type: "Not Found", message: "Cards not found!"};
 }
 
 function crypt(securityCode: string, boolean:boolean): string{

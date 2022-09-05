@@ -3,13 +3,13 @@ import { findByApiKey } from "../repositories/companyRepository";
 import dayjs from "dayjs";
 import { insert } from "../repositories/rechargeRepository";
 
-export async function recharge(apiKey: any, id: number, amount: number){
+export async function recharge(apiKey: any, cardId: number, amount: number){
     await findCompany(apiKey);
-    const card: any = await getCard(id);
-    checkBlock(card.isBlocked);
+    const card: any = await getCard(cardId);
+    isActive(card.password);
     checkValidity(card.expirationDate);
     await insert({
-        cardId: id, 
+        cardId, 
         amount: amount
     })
 }
@@ -30,11 +30,11 @@ async function getCard(id: number): Promise<object>{
     throw {type: "Not Found", message: "Card not found!"};
 }
 
-function checkBlock(isBlocked: boolean){
-    if (!isBlocked){
+function isActive(password: string){
+    if (password){
         return;
     }
-    throw {type: "Conflict", message: "Card not valid!"};
+    throw {type: "Forbidden", message: "Card inactive!"};
 }
 
 function checkValidity(expirationDate: string){
